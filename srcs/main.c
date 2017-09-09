@@ -2,7 +2,7 @@
 
 void resolv(t_crd coord)
 {
-
+	printf("0 = %f, 1 = %f, 2 = %f\n", coord.x, coord.y, coord.z);
 }
 
 static int	ft_inbase(char c, int base)
@@ -68,15 +68,27 @@ int			get_next_nbr(char *str, int *i, int base)
 	return (ft_atoi_base(&str[*i], base));
 }
 
-double ft_get_next_nbr(char *str, int i)
+double ft_get_next_nbr(char *str, int *i)
 {
 	int a;
 	int b;
+	double c;
 
-	while (!ft_isdigit(str[i]))
-		i++;
-	
-	return ();
+	while (str[*i] && !ft_isdigit(str[*i]))
+		*i = *i + 1;
+	a = ft_atoi(&str[*i]);
+	while (str[*i] && ft_isdigit(str[*i]))
+		*i = *i + 1;
+	if (str[*i] == '.')
+		*i = *i + 1;
+	b = ft_atoi(&str[*i]);
+	while (str[*i] && ft_isdigit(str[*i]))
+		*i = *i + 1;
+	c = b;
+	while (c > 1)
+		c /= 10;
+	c += a;
+	return (c);
 }
 
 t_crd parse(char *str)
@@ -87,6 +99,7 @@ t_crd parse(char *str)
 	double val;
 	int pw;
 
+	val = 0;
 	i = 0;
 	while (i < 3)
 		tab[i++] = 0;
@@ -94,18 +107,23 @@ t_crd parse(char *str)
 	while (str[i])
 	{
 		neg = 1;
-		while (!ft_isdigit(str[i]))
+		while (str[i] && !ft_isdigit(str[i]))
 		{
 			if (str[i] == '-')
 				neg = -1;
 			i++;
 		}
-		val = ft_get_next_nbr(&str[i], 0);
+		val = ft_get_next_nbr(&str[i], &i);
+		// val = ft_atoi(&str[i]);
+		// while (ft_isdigit(str[++i])) ;
+		printf("--- %f ---\n", val);
+		printf("%s\n", &str[i]);
 		while (!ft_strncmp(&str[i], "X^", 2))
 			i++;
 		pw = ft_atoi(&str[i]);
+		printf("-- %d --\n", pw);
 		tab[pw] = tab[pw] + neg * val;
-		while (ft_isdigit(str[i]))
+		while (str[i] && ft_isdigit(str[i]))
 			i++;
 	}
 	return ((t_crd){tab[0], tab[1], tab[2]});
@@ -115,7 +133,7 @@ int main(int argc, char **argv)
 {
 	t_crd coord;
 
-	if (argc == 1)
+	if (argc == 2)
 	{
 		coord = parse(argv[1]);
 		resolv(coord);
