@@ -117,9 +117,9 @@ t_crd parse(char *str)
 		// val = ft_atoi(&str[i]);
 		// while (ft_isdigit(str[++i])) ;
 		printf("--- %f ---\n", val);
-		printf("%s\n", &str[i]);
-		while (!ft_strncmp(&str[i], "X^", 2))
+		while (ft_strncmp(&str[i], "X^", 2))
 			i++;
+		printf("%s\n", &str[i]);
 		pw = ft_atoi(&str[i]);
 		printf("-- %d --\n", pw);
 		tab[pw] = tab[pw] + neg * val;
@@ -128,6 +128,21 @@ t_crd parse(char *str)
 	}
 	return ((t_crd){tab[0], tab[1], tab[2]});
 }
+
+// t_crd parse(char *str)
+// {
+// 	int i;
+
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		ft_putendl(&str[i]);
+// 		while (str[i] && ft_strncmp(&str[i], "X^", 2))
+// 			i++;
+// 		i++;
+// 	}
+// 	return ((t_crd){0, 1, 2});
+// }
 
 int main(int argc, char **argv)
 {
